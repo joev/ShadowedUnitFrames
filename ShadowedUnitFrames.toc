@@ -14,6 +14,7 @@ libs\LibSharedMedia-3.0\lib.xml
 libs\AceDB-3.0\AceDB-3.0.xml
 ##libs\LibDualSpec-1.0\LibDualSpec-1.0.lua
 libs\LibSpellRange-1.0\lib.xml
+libs\LibClassicDurations\LibClassicDurations.xml
 #@end-no-lib-strip@
 
 localization\enUS.lua
@@ -50,15 +51,15 @@ modules\fader.lua
 modules\basecombopoints.lua
 modules\combopoints.lua
 modules\incheal.lua
-##modules\incabsorb.lua
-##modules\healabsorb.lua
+modules\incabsorb.lua
+modules\healabsorb.lua
 modules\range.lua
 modules\empty.lua
 modules\druid.lua
 modules\soulshards.lua
 modules\holypower.lua
 modules\chi.lua
-##modules\altpower.lua
+modules\altpower.lua
 modules\monkstagger.lua
 modules\aurapoints.lua
 modules\priest.lua

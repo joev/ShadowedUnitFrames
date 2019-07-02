@@ -75,14 +75,16 @@ function Highlight:OnEnable(frame)
 	frame.highlight.right:SetWidth(ShadowUF.db.profile.units[frame.unitType].highlight.size)
 	
 	
-	if( ShadowUF.db.profile.units[frame.unitType].highlight.aggro ) then
-		-- frame:RegisterUnitEvent("UNIT_THREAT_SITUATION_UPDATE", self, "UpdateThreat")
-		-- frame:RegisterUpdateFunc(self, "UpdateThreat")
+	if( ShadowUF.db.profile.units[frame.unitType].highlight.aggro and not ShadowUF.isClassicWow) then
+		frame:RegisterUnitEvent("UNIT_THREAT_SITUATION_UPDATE", self, "UpdateThreat")
+		frame:RegisterUpdateFunc(self, "UpdateThreat")
 	end
 	
 	if( ShadowUF.db.profile.units[frame.unitType].highlight.attention and frame.unitType ~= "target" and frame.unitType ~= "focus" ) then
 		frame:RegisterNormalEvent("PLAYER_TARGET_CHANGED", self, "UpdateAttention")
-		--frame:RegisterNormalEvent("PLAYER_FOCUS_CHANGED", self, "UpdateAttention")
+		if not ShadowUF.isClassicWow then 
+			frame:RegisterNormalEvent("PLAYER_FOCUS_CHANGED", self, "UpdateAttention")
+		end
 		frame:RegisterUpdateFunc(self, "UpdateAttention")
 	end
 

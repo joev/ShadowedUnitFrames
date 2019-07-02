@@ -1,0 +1,30 @@
+tag 8b41ae073486d4601e157848c6c474ed7b7955b9 v4.2.2
+Author:	Hendrik Leppkes <h.leppkes@gmail.com>
+Date:	Sat Mar 23 13:09:57 2019 +0100
+
+Tag as v4.2.2
+
+commit fee1746659a3befbc0d0d0be532882f34241ce23
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Sat Mar 23 13:07:56 2019 +0100
+
+    Clear tag error when appropriate
+
+commit 4eeac6f2a611be5785019b4256a59cbb7425da90
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Sat Mar 23 13:05:42 2019 +0100
+
+    Don't run tag updates on frames without units
+
+commit 68474dd7c5d4cdd821f0e3123ad4800d7d4ab4d8
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Sat Mar 23 12:33:38 2019 +0100
+
+    Update TOC for 8.1(.5)
+
+commit c880ddb2828cba0b29bb5f7c2b7bc5fa974d924f
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Thu Sep 6 08:53:27 2018 +0200
+
+    Update castbar module to use the GUID for cast tracking
+

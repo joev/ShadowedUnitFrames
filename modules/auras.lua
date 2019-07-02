@@ -4,12 +4,20 @@ local mainHand, offHand, ranged, tempEnchantScan = {time = 0}, {time = 0}, {time
 local canCure = ShadowUF.Units.canCure
 ShadowUF:RegisterModule(Auras, "auras", ShadowUF.L["Auras"])
 
+local LCD = LibStub("LibClassicDurations")
+LCD:Register(Auras) -- tell library it's being used and should start working
+
 function Auras:OnEnable(frame)
 	frame.auras = frame.auras or {}
 	
 	frame:RegisterNormalEvent("PLAYER_ENTERING_WORLD", self, "Update")
 	frame:RegisterUnitEvent("UNIT_AURA", self, "Update")
 	frame:RegisterUpdateFunc(self, "Update")
+	-- NOTE: Enemy buff tracking won't start until you register UNIT_BUFF
+	LCD.RegisterCallback(Auras, "UNIT_BUFF", function(event, unit)
+	    if unit ~= "target" then return end
+	    Auras:Update(frame)
+	end)
 
 	self:UpdateFilter(frame)
 end
@@ -596,7 +604,7 @@ local function scan(parent, frame, type, config, displayConfig, filter)
 	local index = 0
 	while( true ) do
 		index = index + 1
-		local name, texture, count, auraType, duration, endTime, caster, isRemovable, nameplateShowPersonal, spellID, canApplyAura, isBossDebuff = UnitAura(frame.parent.unit, index, filter)
+		local name, texture, count, auraType, duration, endTime, caster, isRemovable, nameplateShowPersonal, spellID, canApplyAura, isBossDebuff = LCD:UnitAura(frame.parent.unit, index, filter)
 		if( not name ) then break end
 
 		renderAura(parent, frame, type, config, displayConfig, index, filter, isFriendly, curable, name, texture, count, auraType, duration, endTime, caster, isRemovable, nameplateShowPersonal, spellID, canApplyAura, isBossDebuff)

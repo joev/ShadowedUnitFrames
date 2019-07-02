@@ -124,7 +124,9 @@ function Range:OnEnable(frame)
 		frame.range = CreateFrame("Frame", nil, frame)
 	end
 
-	frame:RegisterNormalEvent("PLAYER_SPECIALIZATION_CHANGED", self, "SpellChecks")
+	if not ShadowUF.isClassicWow then 
+		frame:RegisterNormalEvent("PLAYER_SPECIALIZATION_CHANGED", self, "SpellChecks")
+	end
 	frame:RegisterUpdateFunc(self, "ForceUpdate")
 
 	createTimer(frame)

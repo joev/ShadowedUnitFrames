@@ -13,21 +13,22 @@ local _G = getfenv(0)
 
 ShadowUF.Units = Units
 ShadowUF:RegisterModule(Units, "units")
+if not ShadowUF.isClassicWow then
+	-- This is the wrapper frame that everything parents to so we can just hide it when we need to deal with pet battles
+	local petBattleFrame = CreateFrame("Frame", "SUFWrapperFrame", UIParent, "SecureHandlerBaseTemplate")
+	petBattleFrame:SetFrameStrata("BACKGROUND")
+	petBattleFrame:SetAllPoints(UIParent)
+	petBattleFrame:WrapScript(petBattleFrame, "OnAttributeChanged", [[
+		if( name ~= "state-petbattle" ) then return end
+		if( value == "active" ) then
+			self:Hide()
+		else
+			self:Show()
+		end
+	]])
 
--- This is the wrapper frame that everything parents to so we can just hide it when we need to deal with pet battles
-local petBattleFrame = CreateFrame("Frame", "SUFWrapperFrame", UIParent, "SecureHandlerBaseTemplate")
-petBattleFrame:SetFrameStrata("BACKGROUND")
-petBattleFrame:SetAllPoints(UIParent)
-petBattleFrame:WrapScript(petBattleFrame, "OnAttributeChanged", [[
-	if( name ~= "state-petbattle" ) then return end
-	if( value == "active" ) then
-		self:Hide()
-	else
-		self:Show()
-	end
-]])
-
-RegisterStateDriver(petBattleFrame, "petbattle", "[petbattle] active; none")
+	RegisterStateDriver(petBattleFrame, "petbattle", "[petbattle] active; none")
+end
 
 -- Frame shown, do a full update
 local function FullUpdate(self)
@@ -532,9 +533,11 @@ OnAttributeChanged = function(self, name, unit)
 		self:RegisterUnitEvent("UNIT_TARGETABLE_CHANGED", self, "FullUpdate")
 
 	-- Automatically do a full update on focus change
-	elseif( self.unit == "focus" ) then
+	elseif( not ShadowUF.isClassicWow and self.unit == "focus" ) then
 		self.isUnitVolatile = true
-		--self:RegisterNormalEvent("PLAYER_FOCUS_CHANGED", Units, "CheckUnitStatus")
+		if not ShadowUF.isClassicWow then
+			self:RegisterNormalEvent("PLAYER_FOCUS_CHANGED", Units, "CheckUnitStatus")
+		end
 		self:RegisterUnitEvent("UNIT_TARGETABLE_CHANGED", self, "FullUpdate")
 				
 	elseif( self.unit == "player" ) then
@@ -591,7 +594,9 @@ OnAttributeChanged = function(self, name, unit)
 			self.unitRealOwner = ShadowUF.arenaUnits[self.unitID] .. "target"
 		elseif( self.unit == "focustarget" ) then
 			self.unitRealOwner = "focus"
-			--self:RegisterNormalEvent("PLAYER_FOCUS_CHANGED", Units, "CheckUnitStatus")
+			if not ShadowUF.isClassicWow then
+				self:RegisterNormalEvent("PLAYER_FOCUS_CHANGED", Units, "CheckUnitStatus")
+			end
 		elseif( self.unit == "targettarget" or self.unit == "targettargettarget" ) then
 			self.unitRealOwner = "target"
 			self:RegisterNormalEvent("PLAYER_TARGET_CHANGED", Units, "CheckUnitStatus")

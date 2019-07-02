@@ -1,3 +1,6 @@
+-- doesn't work in Classic Wow
+if ShadowUF.isClassicWow then return end
+
 local AltPower = {}
 AltPower.defaultVisibility = false
 ShadowUF:RegisterModule(AltPower, "altPowerBar", ShadowUF.L["Alt. Power bar"], true)

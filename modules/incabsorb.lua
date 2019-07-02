@@ -1,3 +1,6 @@
+-- doesn't work in Classic Wow
+if ShadowUF.isClassicWow then return end
+
 local IncAbsorb = setmetatable({["frameKey"] = "incAbsorb", ["colorKey"] = "incAbsorb", ["frameLevelMod"] = 3}, {__index = ShadowUF.IncHeal})
 ShadowUF:RegisterModule(IncAbsorb, "incAbsorb", ShadowUF.L["Incoming absorbs"])
 

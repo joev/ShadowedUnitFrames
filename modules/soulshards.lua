@@ -4,6 +4,10 @@ local Souls = setmetatable({}, {__index = ShadowUF.ComboPoints})
 ShadowUF:RegisterModule(Souls, "soulShards", ShadowUF.L["Soul Shards"], nil, "WARLOCK")
 local soulsConfig = {max = 5, key = "soulShards", colorKey = "SOULSHARDS", powerType = Enum.PowerType.SoulShards, eventType = "SOUL_SHARDS", icon = "Interface\\AddOns\\ShadowedUnitFrames\\media\\textures\\shard"}
 
+local SPEC_WARLOCK_DESTRUCTION = _G.SPEC_WARLOCK_DESTRUCTION or 1 
+local SPEC_WARLOCK_AFFLICTION = _G.SPEC_WARLOCK_AFFLICTION or 2 
+local GetSpecialization = _G.GetSpecialization or function( ... ) return SPEC_WARLOCK_AFFLICTION end
+
 function Souls:OnEnable(frame)
 	frame.soulShards = frame.soulShards or CreateFrame("Frame", nil, frame)
 	frame.soulShards.cpConfig = soulsConfig
@@ -14,7 +18,9 @@ function Souls:OnEnable(frame)
 	frame:RegisterUnitEvent("UNIT_POWER_FREQUENT", self, "Update")
 	frame:RegisterUnitEvent("UNIT_MAXPOWER", self, "UpdateBarBlocks")
 	frame:RegisterUnitEvent("UNIT_DISPLAYPOWER", self, "Update")
-	frame:RegisterNormalEvent("PLAYER_SPECIALIZATION_CHANGED", self, "SpecChanged")
+	if not ShadowUF.isClassicWow then
+		frame:RegisterNormalEvent("PLAYER_SPECIALIZATION_CHANGED", self, "SpecChanged")
+	end
 
 	frame:RegisterUpdateFunc(self, "Update")
 	frame:RegisterUpdateFunc(self, "UpdateBarBlocks")

@@ -8,8 +8,9 @@ function IncHeal:OnEnable(frame)
 	frame:RegisterUnitEvent("UNIT_MAXHEALTH", self, "UpdateFrame")
 	frame:RegisterUnitEvent("UNIT_HEALTH", self, "UpdateFrame")
 	frame:RegisterUnitEvent("UNIT_HEALTH_FREQUENT", self, "UpdateFrame")
-	--frame:RegisterUnitEvent("UNIT_HEAL_PREDICTION", self, "UpdateFrame")
-
+	if not ShadowUF.isClassicWow then
+		frame:RegisterUnitEvent("UNIT_HEAL_PREDICTION", self, "UpdateFrame")
+	end
 	frame:RegisterUpdateFunc(self, "UpdateFrame")
 end
 
@@ -138,10 +139,12 @@ end
 function IncHeal:UpdateFrame(frame)
 	if( not frame.visibility[self.frameKey] or not frame.visibility.healthBar ) then return end
 	
-	-- local amount = UnitGetIncomingHeals(frame.unit) or 0
-	-- if( amount > 0 and frame.visibility.healAbsorb ) then
-	-- 	amount = amount + (UnitGetTotalHealAbsorbs(frame.unit) or 0)
-	-- end
+	if not ShadowUF.isClassicWow then
+		local amount = UnitGetIncomingHeals(frame.unit) or 0
+		if( amount > 0 and frame.visibility.healAbsorb ) then
+			amount = amount + (UnitGetTotalHealAbsorbs(frame.unit) or 0)
+		end
 
-	-- self:PositionBar(frame, amount)
+		self:PositionBar(frame, amount)
+	end
 end

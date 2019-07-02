@@ -15,6 +15,8 @@ ShadowUF.fakeUnits = {["targettarget"] = true, ["targettargettarget"] = true, ["
 L.units = {["raidpet"] = L["Raid pet"], ["PET"] = L["Pet"], ["VEHICLE"] = L["Vehicle"], ["arena"] = L["Arena"], ["arenapet"] = L["Arena Pet"], ["arenatarget"] = L["Arena Target"], ["arenatargettarget"] = L["Arena Target of Target"], ["boss"] = L["Boss"], ["bosstarget"] = L["Boss Target"], ["focus"] = L["Focus"], ["focustarget"] = L["Focus Target"], ["mainassist"] = L["Main Assist"], ["mainassisttarget"] = L["Main Assist Target"], ["maintank"] = L["Main Tank"], ["maintanktarget"] = L["Main Tank Target"], ["party"] = L["Party"], ["partypet"] = L["Party Pet"], ["partytarget"] = L["Party Target"], ["pet"] = L["Pet"], ["pettarget"] = L["Pet Target"], ["player"] = L["Player"],["raid"] = L["Raid"], ["target"] = L["Target"], ["targettarget"] = L["Target of Target"], ["targettargettarget"] = L["Target of Target of Target"], ["battleground"] = L["Battleground"], ["battlegroundpet"] = L["Battleground Pet"], ["battlegroundtarget"] = L["Battleground Target"], ["partytargettarget"] = L["Party Target of Target"], ["battlegroundtargettarget"] = L["Battleground Target of Target"], ["maintanktargettarget"] = L["Main Tank Target of Target"], ["mainassisttargettarget"] = L["Main Assist Target of Target"], ["bosstargettarget"] = L["Boss Target of Target"]}
 L.shortUnits = {["battleground"] = L["BG"], ["battlegroundtarget"] = L["BG Target"], ["battlegroundpet"] = L["BG Pet"], ["battlegroundtargettarget"] = L["BG ToT"], ["arenatargettarget"] = L["Arena ToT"], ["partytargettarget"] = L["Party ToT"], ["bosstargettarget"] = L["Boss ToT"], ["maintanktargettarget"] = L["MT ToT"], ["mainassisttargettarget"] = L["MA ToT"]}
 
+ShadowUF.isClassicWow = select(4,GetBuildInfo()) < 20000
+
 -- Cache the units so we don't have to concat every time it updates
 ShadowUF.unitTarget = setmetatable({}, {__index = function(tbl, unit) rawset(tbl, unit, unit .. "target"); return unit .. "target" end})
 ShadowUF.partyUnits, ShadowUF.raidUnits, ShadowUF.raidPetUnits, ShadowUF.bossUnits, ShadowUF.arenaUnits, ShadowUF.battlegroundUnits = {}, {}, {}, {}, {}, {}
@@ -26,8 +28,11 @@ for i=1, MAX_BOSS_FRAMES do ShadowUF.bossUnits[i] = "boss" .. i end
 for i=1, 5 do ShadowUF.arenaUnits[i] = "arena" .. i end
 for i=1, 4 do ShadowUF.battlegroundUnits[i] = "arena" .. i end
 
-function UnitIsOtherPlayersBattlePet(unit)
-	return false
+-- create false globals for missing calls in Classic
+if ShadowUF.isClassicWow then
+	UnitIsOtherPlayersBattlePet = function(...) return false end
+	UnitTargetsVehicleInRaidUI = function(...) return false end
+	UnitHasVehicleUI = function(...) return false end
 end
 
 function ShadowUF:OnInitialize()
@@ -736,10 +741,12 @@ function ShadowUF:HideBlizzardFrames()
 			
 		-- We keep these in case someone is still using the default auras, otherwise it messes up vehicle stuff
 		PlayerFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-		-- PlayerFrame:RegisterEvent("UNIT_ENTERING_VEHICLE")
-		-- PlayerFrame:RegisterEvent("UNIT_ENTERED_VEHICLE")
-		-- PlayerFrame:RegisterEvent("UNIT_EXITING_VEHICLE")
-		-- PlayerFrame:RegisterEvent("UNIT_EXITED_VEHICLE")
+		if not ShadowUF.isClassicWow then
+			PlayerFrame:RegisterEvent("UNIT_ENTERING_VEHICLE")
+			PlayerFrame:RegisterEvent("UNIT_ENTERED_VEHICLE")
+			PlayerFrame:RegisterEvent("UNIT_EXITING_VEHICLE")
+			PlayerFrame:RegisterEvent("UNIT_EXITED_VEHICLE")
+		end
 		PlayerFrame:SetMovable(true)
 		PlayerFrame:SetUserPlaced(true)
 		PlayerFrame:SetDontSavePosition(true)
