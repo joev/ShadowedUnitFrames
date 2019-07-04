@@ -18,6 +18,9 @@ externals:
     libs/LibHealComm-4.0:
         url: git://git.wowace.com/wow/libhealcomm-4-0/mainline.git
         tag: latest
+    libs/LibClassicDurations: 
+    	url: git://repos.curseforge.com/wow/libclassicdurations
+	tag: latest
     options/libs/AceConfig-3.0:
         url: svn://svn.wowace.com/wow/ace3/mainline/trunk/AceConfig-3.0
     options/libs/AceDBOptions-3.0:
@@ -27,7 +30,10 @@ externals:
     options/libs/AceGUI-3.0-SharedMediaWidgets:
         url: svn://svn.wowace.com/wow/ace-gui-3-0-shared-media-widgets/mainline/trunk
         tag: latest
+
 ignore:
+ 	- libs/LibClassicDurations/README.md
+ 	- libs/LibClassicDurations/LibClassicDurations.toc
 	- globalcheck.lua
 	- localcheck.lua
 
